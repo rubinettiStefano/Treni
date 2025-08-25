@@ -3,6 +3,7 @@ package com.generation.entities;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
+import java.util.ArrayList;
 
 /**
  * La route rappresenta un biglietto generico (non legato a persona o posto)
@@ -25,6 +26,10 @@ public class Route
 	private double basePrice;
 	private String trainType,tier;
 
+	//proprietà relazionale
+	//Molteplicità della relazione, Route 1 - N Ticket
+	private ArrayList<Ticket> tickets = new ArrayList<>();
+
 	//Metodi
 
 	/**
@@ -42,7 +47,7 @@ public class Route
 	 */
 	public double price()
 	{
-		return 0;
+		return basePrice;
 		//TODO
 		//STUB DEL METODO, versione ""Funzionante"", che non rompe il programma
 		//da completare
@@ -50,10 +55,22 @@ public class Route
 
 	/**
 	 * Metodo che calcola il tempo di percorrenza
+	 * Non prevedo ne accetto viaggi di durata superiore alle 24 ore
+	 * Quindi posso dire con certezza che se il tempo di arrivo
+	 * è minore di quello di partenza, in realtà si riferisce al giorno dopo
 	 * @return il tempo di percorrenza in minuti
 	 */
 	public int travelTime()
 	{
+		//se il tempo di arrivo è minore di quello di partenza
+		if(arrivingTime.isBefore(departureTime))
+//			return (int)departureTime.until(LocalTime.of(23,59,59), ChronoUnit.MINUTES) +(int)LocalTime.MIDNIGHT.until(arrivingTime, ChronoUnit.MINUTES) ;
+			return (24*60)-(int)arrivingTime.until(departureTime, ChronoUnit.MINUTES);
+		//lavorare con il complementare
+		//21      10
+		//10 to 21 -> 11
+		//24 - 11  -> 13
+
 		return (int)departureTime.until(arrivingTime, ChronoUnit.MINUTES);
 	}
 
@@ -74,6 +91,25 @@ public class Route
 		return "";
 		//TODO
 	}
+
+	public double totalRevenue()
+	{
+		double res = 0;
+		for(Ticket t : tickets)
+			res+=t.finalPrice();
+		return res;
+	}
+
+	public void addTicket(Ticket t)
+	{
+		if(tickets.contains(t))
+			return;
+		//aggiungi il ticket alla lista della route
+		tickets.add(t);
+		//imposta questa route come route del ticket
+		t.setRoute(this);
+	}
+
 
 	public LocalTime getDepartureTime()
 	{
