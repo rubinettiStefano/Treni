@@ -1,12 +1,14 @@
 package com.generation.repositories;
 
 import com.generation.entities.Route;
+import com.generation.entities.Ticket;
 import com.generation.library.FileReader;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * OFFRE LE FUNZIONALITÀ DI C.R.U.D. per l'entità Route
@@ -16,6 +18,7 @@ public class RepositoryRouteCsv
 	//LISTA DI ROUTE
 	private ArrayList<Route> content = new ArrayList<>();
 	private String fileName;
+	private RepositoryTicketCsv ticketRepo = new RepositoryTicketCsv("tickets.csv");
 
 	public RepositoryRouteCsv(String fileName)
 	{
@@ -32,6 +35,38 @@ public class RepositoryRouteCsv
 		//Milano Centrale,Roma Termini,08:00,12:30,570,50,FrecciaRossa,Economy
 		while (reader.hasRow())
 			convertAndAddRow(reader.readString());
+
+//		//5 *100 -> 500 -> N^2 -> con n 1000 1000000
+//		for(Route r : content)
+//			for(Ticket t: ticketRepo.read())
+//				if(t.getRouteId()==r.getId())//chiave esterna ticket UGUALE chiave primaria Route
+//					r.addTicket(t);
+//
+//		//2N   2000
+
+
+		HashMap<Long, ArrayList<Ticket>> fkToTicket = new HashMap<>();
+
+		for (Ticket t : ticketRepo.read())//scorro tutti i ticket
+			if (!fkToTicket.containsKey(t.getRouteId()))//se è il primo con quella chiave esterna
+			{
+				//creo una lista che contiene solo lui
+				ArrayList<Ticket> temp = new ArrayList<>();
+				temp.add(t);
+				//la metto nella mappa chiave esterna
+				fkToTicket.put(t.getRouteId(),temp);
+			}
+			else //altrimenti lo aggiungo alla lista che ha la sua stessa chiave esterna
+				fkToTicket.get(t.getRouteId()).add(t);
+
+		for(Route r : content)//scorro tutte le route
+		{
+			//prendo dalla mappa la lista di ticket la cui chiave esterna
+			//è uguale alla chiave primaria della route
+			ArrayList<Ticket> ticketDaCollegare = fkToTicket.get(r.getId());
+			for(Ticket t:ticketDaCollegare )//li scorro e li collego 1 a 1
+				r.addTicket(t);
+		}
 	}
 
 
@@ -71,14 +106,15 @@ public class RepositoryRouteCsv
 		//2 - splitto la riga del csv
 		String[] spl = row.split(",");
 		//3 - utilizzo i valori della riga per riempire le proprietà dell'oggetto
-		r.setDepartureStation(spl[0]);
-		r.setArrivalStation(spl[1]);
-		r.setDepartureTime(LocalTime.parse(spl[2]));
-		r.setArrivingTime(LocalTime.parse(spl[3]));
-		r.setDistance(Integer.parseInt(spl[4]));
-		r.setBasePrice(Double.parseDouble(spl[5]));
-		r.setTrainType(spl[6]);
-		r.setTier(spl[7]);
+		r.setId(Long.parseLong(spl[0])); // nuovo campo id
+		r.setDepartureStation(spl[1]);
+		r.setArrivalStation(spl[2]);
+		r.setDepartureTime(LocalTime.parse(spl[3]));
+		r.setArrivingTime(LocalTime.parse(spl[4]));
+		r.setDistance(Integer.parseInt(spl[5]));
+		r.setBasePrice(Double.parseDouble(spl[6]));
+		r.setTrainType(spl[7]);
+		r.setTier(spl[8]);
 		//4 - aggiungo oggetto alla lista
 		content.add(r);
 	}

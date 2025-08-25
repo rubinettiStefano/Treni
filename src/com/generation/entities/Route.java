@@ -4,6 +4,7 @@ import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
+import java.util.StringJoiner;
 
 /**
  * La route rappresenta un biglietto generico (non legato a persona o posto)
@@ -19,6 +20,9 @@ public class Route
 	//TODO
 	private static String[] validTrainTypes =	 {"Regionale", "Intercity", "FrecciaRossa"};
 	private static String[] validTiers		 = {"Economy", "Buisiness", "PrimaClasse"};
+
+	//primary key - id
+	private Long id;
 
 	private LocalTime departureTime,arrivingTime;
 	private int distance;
@@ -81,15 +85,6 @@ public class Route
 	public double avgSpeed()
 	{
 		return 0;//TODO
-	}
-
-	/**
-	 * Deve contenere le informazioni importanti sul biglietto, decidete voi quali
-	 */
-	public String toString()
-	{
-		return "";
-		//TODO
 	}
 
 	public double totalRevenue()
@@ -191,5 +186,28 @@ public class Route
 		this.tier = tier;
 	}
 
+	public Long getId()
+	{
+		return id;
+	}
 
+	public void setId(Long id)
+	{
+		this.id = id;
+	}
+
+	public String toString()
+	{
+		return new StringJoiner(", ", Route.class.getSimpleName() + "[", "]")
+				.add("tier='" + tier + "'")
+				.add("trainType='" + trainType + "'")
+				.add("basePrice=" + basePrice)
+				.add("arrivalStation='" + arrivalStation + "'")
+				.add("departureStation='" + departureStation + "'")
+				.add("distance=" + distance)
+				.add("arrivingTime=" + arrivingTime)
+				.add("departureTime=" + departureTime)
+				.add("id=" + id)
+				.toString();
+	}
 }

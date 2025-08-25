@@ -1,0 +1,7 @@
+id,customerFullName,seat,obliterated,discountPercentage,day,routeId
+1,Mario Rossi,12A,False,0,2025-09-01,1
+2,Luca Bianchi,7B,True,10,2025-09-02,2
+3,Anna Verdi,3C,False,20,2025-09-03,1
+4,Giovanni Neri,15D,False,0,2025-09-04,2
+5,Elisa Gallo,8F,True,50,2025-09-05,2
+6,Marco Fontana,21E,False,30,2025-09-06,1
