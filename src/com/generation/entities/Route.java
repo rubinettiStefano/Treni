@@ -16,8 +16,14 @@ public class Route
 	//basePrice> 0
 	//trainType e tier uno di quelli specificati nel metodo del prezzo (se vi ricordate come sarebbe carino mettere i valori validi come proprietà static)
 	//TODO
-	private LocalTime departureTime,arrivingTime;
+	private static String[] validTrainTypes =	 {"Regionale", "Intercity", "FrecciaRossa"};
+	private static String[] validTiers		 = {"Economy", "Buisiness", "PrimaClasse"};
 
+	private LocalTime departureTime,arrivingTime;
+	private int distance;
+	private String departureStation, arrivalStation;
+	private double basePrice;
+	private String trainType,tier;
 
 	//Metodi
 
@@ -68,4 +74,86 @@ public class Route
 		return "";
 		//TODO
 	}
+
+	public LocalTime getDepartureTime()
+	{
+		return departureTime;
+	}
+
+	public void setDepartureTime(LocalTime departureTime)
+	{
+		this.departureTime = departureTime;
+	}
+
+	public LocalTime getArrivingTime()
+	{
+		return arrivingTime;
+	}
+
+	public void setArrivingTime(LocalTime arrivingTime)
+	{
+		this.arrivingTime = arrivingTime;
+	}
+
+	public int getDistance()
+	{
+		return distance;
+	}
+
+	public void setDistance(int distance)
+	{
+		this.distance = distance;
+	}
+
+	public String getDepartureStation()
+	{
+		return departureStation;
+	}
+
+	public void setDepartureStation(String departureStation)
+	{
+		this.departureStation = departureStation;
+	}
+
+	public String getArrivalStation()
+	{
+		return arrivalStation;
+	}
+
+	public void setArrivalStation(String arrivalStation)
+	{
+		this.arrivalStation = arrivalStation;
+	}
+
+	public double getBasePrice()
+	{
+		return basePrice;
+	}
+
+	public void setBasePrice(double basePrice)
+	{
+		this.basePrice = basePrice;
+	}
+
+	public String getTrainType()
+	{
+		return trainType;
+	}
+
+	public void setTrainType(String trainType)
+	{
+		this.trainType = trainType;
+	}
+
+	public String getTier()
+	{
+		return tier;
+	}
+
+	public void setTier(String tier)
+	{
+		this.tier = tier;
+	}
+
+
 }
